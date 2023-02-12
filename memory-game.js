@@ -17,14 +17,9 @@ const matchedCount = document.createElement('p');
 flippedCount.classList.add('flipped-count');
 matchedCount.classList.add('matched-count');
 
-const gameTitle = document.getElementsByTagName('h1')[0];
-
-gameTitle.appendChild(flippedCount);
-gameTitle.appendChild(matchedCount);
-
 function updateCounts() {
-  flippedCount.innerText = `Flipped: ${flippedCards.length}`;
-  matchedCount.innerText = `Matched: ${matchedCards.length}`;
+  document.getElementById('match-count').innerText = matchedCards.length;
+  document.getElementById('flip-count').innerText = flippedCards.length;
 }
 updateCounts();
 

@@ -7,3 +7,13 @@
   margin: 20px;
   display: inline-block;
 }
+
+.container {
+  display: flex;
+  justify-content:center;
+}
+
+.container div {
+  padding: 10px;
+  text-align: center;
+}
