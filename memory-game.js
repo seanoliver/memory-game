@@ -9,8 +9,27 @@ const COLORS = [
 ];
 
 const colors = shuffle(COLORS);
+let flippedCards = [];
+let matchedCards = [];
+
+const flippedCount = document.createElement('p');
+const matchedCount = document.createElement('p');
+flippedCount.classList.add('flipped-count');
+matchedCount.classList.add('matched-count');
+
+const gameTitle = document.getElementsByTagName('h1')[0];
+
+gameTitle.appendChild(flippedCount);
+gameTitle.appendChild(matchedCount);
+
+function updateCounts() {
+  flippedCount.innerText = `Flipped: ${flippedCards.length}`;
+  matchedCount.innerText = `Matched: ${matchedCards.length}`;
+}
+updateCounts();
 
 createCards(colors);
+
 
 
 /** Shuffle array items in-place and return shuffled array. */
@@ -42,24 +61,58 @@ function createCards(colors) {
   const gameBoard = document.getElementById("game");
 
   for (let color of colors) {
-    // missing code here ...
+    const card = document.createElement('div');
+    card.classList.add(color);
+    card.innerText = color;
+    card.addEventListener('click', function(event) {
+      handleCardClick(event);
+    });
+    gameBoard.appendChild(card);
   }
 }
 
 /** Flip a card face-up. */
 
 function flipCard(card) {
-  // ... you need to write this ...
+  card.style.backgroundColor = card.className;
+  card.classList.toggle('flipped');
+  flippedCards.push(card);
+
+  if (flippedCards.length >= 2) {
+    checkMatches(flippedCards);
+  }
+
+}
+
+function checkMatches(cardPair) {
+  if (cardPair[0].className === cardPair[1].className) {
+    matchedCards.push(...cardPair);
+    flippedCards = [];
+  } else {
+    setTimeout(() => {
+      for (const card of cardPair) {
+        unFlipCard(card);
+      }
+      flippedCards = [];
+    }, FOUND_MATCH_WAIT_MSECS);
+  }
 }
 
 /** Flip a card face-down. */
 
 function unFlipCard(card) {
   // ... you need to write this ...
+  card.classList.toggle('flipped');
+  card.style.backgroundColor = 'white';
 }
 
 /** Handle clicking on a card: this could be first-card or second-card. */
 
 function handleCardClick(evt) {
-  // ... you need to write this ...
+  if (!evt.target.className.split(' ').includes('flipped')) {
+    if (flippedCards.length < 2) {
+      flipCard(evt.target);
+    }
+    updateCounts();
+  }
 }
