@@ -9,13 +9,9 @@ const COLORS = [
 ];
 
 const colors = shuffle(COLORS);
-let flippedCards = [];
-let matchedCards = [];
 
-const flippedCount = document.createElement('p');
-const matchedCount = document.createElement('p');
-flippedCount.classList.add('flipped-count');
-matchedCount.classList.add('matched-count');
+const flippedCards = document.getElementsByClassName('flipped');
+const matchedCards = document.getElementsByClassName('matched');
 
 function updateCounts() {
   document.getElementById('match-count').innerText = matchedCards.length;
@@ -71,24 +67,24 @@ function createCards(colors) {
 function flipCard(card) {
   card.style.backgroundColor = card.className;
   card.classList.toggle('flipped');
-  flippedCards.push(card);
 
   if (flippedCards.length >= 2) {
-    checkMatches(flippedCards);
+    checkMatches();
   }
 
 }
 
-function checkMatches(cardPair) {
-  if (cardPair[0].className === cardPair[1].className) {
-    matchedCards.push(...cardPair);
-    flippedCards = [];
+function checkMatches() {
+  if (flippedCards[0].className === flippedCards[1].className) {
+    for (let i = flippedCards.length - 1; i >= 0; i--) {
+      flippedCards[i].classList.toggle('matched');
+      flippedCards[i].classList.toggle('flipped');
+    }
   } else {
     setTimeout(() => {
-      for (const card of cardPair) {
-        unFlipCard(card);
+      for (let i = flippedCards.length - 1; i >= 0; i--) {
+        unFlipCard(flippedCards[i]);
       }
-      flippedCards = [];
     }, FOUND_MATCH_WAIT_MSECS);
   }
 }
@@ -96,9 +92,11 @@ function checkMatches(cardPair) {
 /** Flip a card face-down. */
 
 function unFlipCard(card) {
-  // ... you need to write this ...
+  console.log(`Unflipped ${card.style.backgroundColor}`);
+
   card.classList.toggle('flipped');
   card.style.backgroundColor = 'white';
+  updateCounts();
 }
 
 /** Handle clicking on a card: this could be first-card or second-card. */
@@ -108,6 +106,6 @@ function handleCardClick(evt) {
     if (flippedCards.length < 2) {
       flipCard(evt.target);
     }
-    updateCounts();
   }
+  updateCounts();
 }
