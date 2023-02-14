@@ -20,7 +20,7 @@ The goal of the game is to match up all the pairs.
 - [X] When clicking two cards that are not a match, they should stay turned over for at least 1 second before they hide the color again. You should make sure to use a setTimeout so that you can execute code after one second.
 - [X] Make sure this works only if you click on two different cards — clicking the same card twice shouldn’t count as a match!)
 - [X] Make sure that you can not click too quickly and guess more than two cards at a time.
-- [ ] Add a button that when clicked will start the game.
+- [X] Add a button that when clicked will start the game.
 - [ ] Add a button that when clicked will restart the game once it has ended.
 - [ ] For every guess made, increment a score variable and display the score while the game is played.
 - [ ] Store the lowest-scoring game in local storage, so that players can see a record of the best game played.
