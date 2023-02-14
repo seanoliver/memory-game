@@ -1,17 +1,26 @@
 "use strict";
 
-/** Memory game: find matching pairs of cards and flip both of them. */
-
 const FOUND_MATCH_WAIT_MSECS = 1000;
-const COLORS = [
-  "red", "blue", "green", "orange", "purple",
-  "red", "blue", "green", "orange", "purple",
-];
 
-const colors = shuffle(COLORS);
+// TODO: Allow for any number of cards rather than always using the same deck
+// TODO: Instead of hard-coding colors, use something else like images
+
+
+
+// * Global variable trackers for flipped, matched, guessed cards
 
 const flippedCards = document.getElementsByClassName('flipped');
 const matchedCards = document.getElementsByClassName('matched');
+
+
+// ? Optional: Might also be nice to capture user name / identity
+
+// TODO: Increment a score for every guess made
+// TODO: Store the lowest-scoring game in local storage so players can see a record of who played
+
+let score = 0;
+
+/* --------------------------- Update Card Counts --------------------------- */
 
 function updateCounts() {
   document.getElementById('match-count').innerText = matchedCards.length;
@@ -19,11 +28,16 @@ function updateCounts() {
 }
 updateCounts();
 
-createCards(colors);
+/* ========================================================================== */
+/* Start the Game (Create & Shuffle Cards)                                    */
+/* ========================================================================== */
 
+/* Shuffle Cards ------------------------------------------------------------ */
 
-
-/** Shuffle array items in-place and return shuffled array. */
+const COLORS = [
+  "red", "blue", "green", "orange", "purple",
+  "red", "blue", "green", "orange", "purple",
+];
 
 function shuffle(items) {
   // This algorithm does a "perfect shuffle", where there won't be any
@@ -41,12 +55,19 @@ function shuffle(items) {
   return items;
 }
 
+const colors = shuffle(COLORS);
+
+/* ------------------------------ Create Cards ------------------------------ */
+
 /** Create card for every color in colors (each will appear twice)
  *
  * Each div DOM element will have:
  * - a class with the value of the color
  * - a click event listener for each card to handleCardClick
  */
+// TODO: Remove innerText showing card color
+// TODO: Style the cards to look more like cards
+
 
 function createCards(colors) {
   const gameBoard = document.getElementById("game");
@@ -62,10 +83,39 @@ function createCards(colors) {
   }
 }
 
-/** Flip a card face-up. */
+/* Start Game Button -------------------------------------------------------- */
+
+const startButton = document.getElementById('start');
+
+startButton.addEventListener('click', function(event) {
+  createCards(colors);
+  event.target.remove();
+});
+
+/* Restart Game Button ------------------------------------------------------ */
+// TODO: Add a button that when clicked will re-start the game
+
+const restartButton = document.createElement('button');
+const title = document.getElementById('title');
+
+restartButton.innerText = "Restart Game";
+restartButton.id = 'restart';
+
+function restartGame() {
+  // Clear current game board
+  // Clear current score
+  // Reshuffle and recreate cards
+}
+
+
+
+
+/* ---------------------------- Flip Card Face Up --------------------------- */
+
+// TODO: Animate the card-flip
 
 function flipCard(card) {
-  card.style.backgroundColor = card.className;
+  card.style.backgroundColor = card.classList[0];
   card.classList.toggle('flipped');
 
   if (flippedCards.length >= 2) {
@@ -75,7 +125,7 @@ function flipCard(card) {
 }
 
 function checkMatches() {
-  if (flippedCards[0].className === flippedCards[1].className) {
+  if (flippedCards[0].classList[0] === flippedCards[1].classList[0]) {
     for (let i = flippedCards.length - 1; i >= 0; i--) {
       flippedCards[i].classList.toggle('matched');
       flippedCards[i].classList.toggle('flipped');
@@ -89,7 +139,7 @@ function checkMatches() {
   }
 }
 
-/** Flip a card face-down. */
+//SECTION -  Flip a card face-down.
 
 function unFlipCard(card) {
   console.log(`Unflipped ${card.style.backgroundColor}`);
@@ -102,6 +152,7 @@ function unFlipCard(card) {
 /** Handle clicking on a card: this could be first-card or second-card. */
 
 function handleCardClick(evt) {
+  // TODO: Redo this implementation to just use classList rather than creating an array
   if (!evt.target.className.split(' ').includes('flipped')) {
     if (flippedCards.length < 2) {
       flipCard(evt.target);
