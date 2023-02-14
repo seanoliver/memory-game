@@ -37,6 +37,8 @@ updateCounts();
 
 /* Update Score ------------------------------------------------------------- */
 
+//TODO - Add hidden element for end game message so page doesn't adjust down
+
 function updateScore(forceClear = false) {
   // if forceClear === true, end the game but do not record the score
   score += 1
@@ -153,9 +155,8 @@ function flipCard(card) {
 /* Flip Card Face Down ------------------------------------------------------ */
 
 function unFlipCard(card) {
-  console.log(`Unflipped ${card.style.backgroundColor}`);
-
   card.classList.toggle('flipped');
+  // TODO - Change background color back to original color
   card.style.backgroundColor = 'white';
   updateCounts();
 }
