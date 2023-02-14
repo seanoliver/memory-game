@@ -20,6 +20,11 @@ const matchedCards = document.getElementsByClassName('matched');
 
 let score = 0;
 
+
+/* ========================================================================== */
+/* Start the Game (Create & Shuffle Cards)                                    */
+/* ========================================================================== */
+
 /* --------------------------- Update Card Counts --------------------------- */
 
 function updateCounts() {
@@ -27,10 +32,6 @@ function updateCounts() {
   document.getElementById('flip-count').innerText = flippedCards.length;
 }
 updateCounts();
-
-/* ========================================================================== */
-/* Start the Game (Create & Shuffle Cards)                                    */
-/* ========================================================================== */
 
 /* Shuffle Cards ------------------------------------------------------------ */
 
@@ -57,7 +58,7 @@ function shuffle(items) {
 
 const colors = shuffle(COLORS);
 
-/* ------------------------------ Create Cards ------------------------------ */
+/* Create Cards ------------------------------------------------------------- */
 
 /** Create card for every color in colors (each will appear twice)
  *
@@ -75,6 +76,7 @@ function createCards(colors) {
   for (let color of colors) {
     const card = document.createElement('div');
     card.classList.add(color);
+    card.classList.add('card');
     card.innerText = color;
     card.addEventListener('click', function(event) {
       handleCardClick(event);
@@ -90,39 +92,64 @@ const startButton = document.getElementById('start');
 startButton.addEventListener('click', function(event) {
   createCards(colors);
   event.target.remove();
+  title.appendChild(restartButton);
 });
 
 /* Restart Game Button ------------------------------------------------------ */
-// TODO: Add a button that when clicked will re-start the game
+//NOTE - Restarts game mid-game
+
 
 const restartButton = document.createElement('button');
 const title = document.getElementById('title');
 
-restartButton.innerText = "Restart Game";
+restartButton.innerText = "New Game";
 restartButton.id = 'restart';
 
+restartButton.addEventListener('click',  function(event) {
+  restartGame();
+});
+
 function restartGame() {
-  // Clear current game board
-  // Clear current score
-  // Reshuffle and recreate cards
+
+  //NOTE - Clear game board
+  const cards = document.getElementsByClassName('card');
+  for (let i = cards.length -1; i >= 0; i--) {
+    console.log(`Removed ${cards[i].classList[0]} card`);
+    cards[i].remove();
+  }
+
+  //NOTE - Reshuffle and re-create cards
+  createCards(shuffle(colors));
+
+  //TODO: Clear Current Score
 }
 
 
 
 
-/* ---------------------------- Flip Card Face Up --------------------------- */
+/* Flip Card Face Up -------------------------------------------------------- */
 
 // TODO: Animate the card-flip
 
 function flipCard(card) {
   card.style.backgroundColor = card.classList[0];
   card.classList.toggle('flipped');
-
   if (flippedCards.length >= 2) {
     checkMatches();
   }
-
 }
+
+/* Flip Card Face Down ------------------------------------------------------ */
+
+function unFlipCard(card) {
+  console.log(`Unflipped ${card.style.backgroundColor}`);
+
+  card.classList.toggle('flipped');
+  card.style.backgroundColor = 'white';
+  updateCounts();
+}
+
+/* Check for Matches -------------------------------------------------------- */
 
 function checkMatches() {
   if (flippedCards[0].classList[0] === flippedCards[1].classList[0]) {
@@ -139,20 +166,9 @@ function checkMatches() {
   }
 }
 
-//SECTION -  Flip a card face-down.
-
-function unFlipCard(card) {
-  console.log(`Unflipped ${card.style.backgroundColor}`);
-
-  card.classList.toggle('flipped');
-  card.style.backgroundColor = 'white';
-  updateCounts();
-}
-
-/** Handle clicking on a card: this could be first-card or second-card. */
+/* Handle Card Click -------------------------------------------------------- */
 
 function handleCardClick(evt) {
-  // TODO: Redo this implementation to just use classList rather than creating an array
   if (!evt.target.className.split(' ').includes('flipped')) {
     if (flippedCards.length < 2) {
       flipCard(evt.target);
