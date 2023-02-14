@@ -18,6 +18,20 @@ const totalCards = document.getElementsByClassName('card');
 let score = 0;
 let lowestScore = Infinity;
 
+function generateRandomColors(num) {
+  const colors = [];
+
+  for (let i = 0; i < num; i++) {
+    let color = "#";
+    for (let j = 0; j < 6; j++) {
+      color += Math.floor(Math.random() * 16).toString(16);
+    }
+    colors.push(color);
+  }
+
+  return colors;
+}
+
 /* ========================================================================== */
 /* Start the Game (Create & Shuffle Cards)                                    */
 /* ========================================================================== */
