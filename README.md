@@ -21,13 +21,12 @@ The goal of the game is to match up all the pairs.
 - [X] Make sure this works only if you click on two different cards — clicking the same card twice shouldn’t count as a match!)
 - [X] Make sure that you can not click too quickly and guess more than two cards at a time.
 - [X] Add a button that when clicked will start the game.
-- [ ] Add a button that when clicked will restart the game once it has ended.
+- [X] Add a button that when clicked will restart the game once it has ended.
 - [X] For every guess made, increment a score variable and display the score while the game is played.
 - [X] Store the lowest-scoring game in local storage, so that players can see a record of the best game played.
 - [X] Allow for any number of cards to appear, rather than always using the same deck.
 - [X] Instead of hard-coding colors, try something different like random colors or even images.
 
 ## Outstanding Fixes / Changes
-- [ ] Support for images instead of and/or in addition to random colors
-- [ ] BUG: Restart game button is now broken & doesn't accept card # input
-- [ ] Add spacing to allow for end of game message to appear seamlessly
+- [X] Support for images instead of and/or in addition to random colors
+- [X] BUG: Restart game button is now broken & doesn't accept card # input
