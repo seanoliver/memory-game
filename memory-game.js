@@ -230,7 +230,7 @@ function flipCard(card) {
 function unFlipCard(card) {
   card.classList.toggle('flipped');
   card.style.background = '';
-  card.style.backgroundColor = "#fff8ef";
+  card.style.backgroundColor = 'none';
   updateCounts();
 }
 

@@ -4,32 +4,14 @@
 
 :root {
 
-	/* amber */
-	/* hue 6 */
-	--color-amber-1: #fff8ef;
-	--color-amber-2: #ffe0b2;
-	--color-amber-3: #b98300;
-	--color-amber-4: #926700;
-	--color-amber-5: #523800;
-	--color-amber-6: #302100;
-
-	/* chartreuse */
-	/* hue 9 */
-	--color-chartreuse-1: #e5ffc3;
-	--color-chartreuse-2: #98fb00;
-	--color-chartreuse-3: #5c9b00;
-	--color-chartreuse-4: #497c00;
-	--color-chartreuse-5: #264500;
-	--color-chartreuse-6: #182600;
-
-	/* green */
-	/* hue 10 */
-	--color-green-1: #e0ffd9;
-	--color-green-2: #72ff6c;
-	--color-green-3: #00a21f;
-	--color-green-4: #008217;
-	--color-green-5: #004908;
-	--color-green-6: #062800;
+	/* sky */
+	/* hue 16 */
+	--color-sky-1: #e3f7ff;
+	--color-sky-2: #aee9ff;
+	--color-sky-3: #0094b4;
+	--color-sky-4: #007590;
+	--color-sky-5: #00404f;
+	--color-sky-6: #001f28;
 
 	/* emerald */
 	/* hue 11 */
@@ -45,34 +27,33 @@
 body,
 button {
   font-family: 'Nunito', sans-serif;
-  background-color: var(--color-amber-1);
-  color: var(--color-amber-6);
+  background-color: var(--color-sky-1);
+  color: var(--color-sky-6);
 }
 
 button {
-  border: 1px solid var(--color-amber-3);
+  border: 1px solid var(--color-sky-3);
   border-radius: 5px;
   padding: 5px 15px;
 }
 
 button:hover {
-  background-color: var(--color-amber-6);
-  color: var(--color-amber-1);
+  background-color: var(--color-sky-6);
+  color: var(--color-sky-1);
 }
 
 
 .card {
-  border: 1px solid var(--color-amber-3);
+  /* border: 1px solid var(--color-sky-3); */
+  box-shadow: 0px 0px 20px var(--color-sky-3);
   border-radius: 5px;
   width: 100px;
   height: 125px;
   margin: 20px;
 }
 
-/* TODO: Override this hover effect for matched cards. */
-.card:hover {
-  box-shadow: 10px 10px 20px var(--color-amber-3);
-  background-color: var(--color-amber-3) !important;
+.card:hover:not(.matched) {
+  box-shadow: 0px 0px 40px var(--color-sky-3);
 }
 
 
@@ -112,15 +93,15 @@ form#options .format-chooser .format-item {
 form#options #num-cards {
   line-height: 26px;
   margin: 10px 0px;
-  background-color: var(--color-amber-1);
+  background-color: var(--color-sky-1);
   border-radius: 5px;
-  border: 1px solid var(--color-amber-3);
+  border: 1px solid var(--color-sky-3);
   font-family: 'Nunito';
   text-align: center;
 }
 
 form#options #num-cards:hover {
-  background-color: var(--color-amber-2);
+  background-color: var(--color-sky-2);
 }
 
 #game {
@@ -137,7 +118,7 @@ form#options #num-cards:hover {
 }
 
 .header-card {
-  background-color: var(--color-amber-2);
+  background-color: var(--color-sky-2);
   border-radius: 5px;
   margin: 10px;
   width: 100px;
@@ -165,13 +146,13 @@ form#options #num-cards:hover {
 }
 
 #end-game-message {
-  background-color: var(--color-green-1);
+  background-color: var(--color-emerald-1);
   padding: 10px;
   border-radius: 5px;
   text-align: center;
   font-weight: 700;
-  color: var(--color-green-4);
-  border: 1px solid var(--color-green-2);
+  color: var(--color-emerald-4);
+  border: 1px solid var(--color-emerald-2);
 
 }
 
@@ -181,6 +162,7 @@ form#options #num-cards:hover {
 }
 
 #game {
+  padding-top: 75px;
   padding-bottom: 75px;
 }
 
@@ -209,5 +191,7 @@ form#options #num-cards:hover {
 }
 /* Desktop */
 @media only screen and (min-width: 961px) {
-
+  .card:hover:not(.matched) {
+    background-color: var(--color-sky-3);
+  }
 }
