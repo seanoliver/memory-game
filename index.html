@@ -6,52 +6,56 @@
   <link rel="stylesheet" href="memory-game.css"/>
 </head>
 <body>
-
-<div id="header">
-<div class="container">
-  <div class="scores header-item">
-    <div class="best-score header-card">
-      <p class="header-card-title">Best</p>
-      <p id="best-score" class="header-card-value"></p>
-    </div>
-    <div class="current-score header-card">
-      <p class="header-card-title">Score</p>
-      <p id="current-score" class="header-card-value"></p>
-    </div>
-  </div>
-  <div id="title" class="header-title">
-    <h1>Remember Me</h1>
-    <form id="options">
-      <div class="format-chooser">
-        <div class="format-item">
-          <input type="radio" name="format" value="Colors" id="colors" checked>
-          <label for="colors">Colors</label>
-        </div>
-        <div class="format-item">
-          <input type="radio" name="format" value="GIFs" id="gifs">
-          <label for="gifs">GIFs</label>
-        </div>
+<div id="page-container">
+  <div id="header">
+  <div class="container">
+    <div class="scores header-item">
+      <div class="best-score header-card">
+        <p class="header-card-title">Best</p>
+        <p id="best-score" class="header-card-value"></p>
       </div>
-      <input id="num-cards" placeholder="Number of Cards" type="text"></input>
-      <button id="start" type="submit">Start Game</button>
-    </form>
-  </div>
-  <div class="counts header-item">
-    <div class="matched-count header-card">
-      <p class="header-card-title">Matched</p>
-      <p id="match-count" class="header-card-value"></p>
+      <div class="current-score header-card">
+        <p class="header-card-title">Score</p>
+        <p id="current-score" class="header-card-value"></p>
+      </div>
     </div>
-    <div class="flipped-count header-card">
-      <p class="header-card-title">Flipped</p>
-      <p id="flip-count" class="header-card-value"></p>
+    <div id="title" class="header-title">
+      <h1>Remember Me</h1>
+      <form id="options">
+        <div class="format-chooser">
+          <div class="format-item">
+            <input type="radio" name="format" value="Colors" id="colors" checked>
+            <label for="colors">Colors</label>
+          </div>
+          <div class="format-item">
+            <input type="radio" name="format" value="GIFs" id="gifs">
+            <label for="gifs">GIFs</label>
+          </div>
+        </div>
+        <input id="num-cards" placeholder="Number of Cards" type="text"></input>
+        <button id="start" type="submit">Start Game</button>
+      </form>
+    </div>
+    <div class="counts header-item">
+      <div class="matched-count header-card">
+        <p class="header-card-title">Matched</p>
+        <p id="match-count" class="header-card-value"></p>
+      </div>
+      <div class="flipped-count header-card">
+        <p class="header-card-title">Flipped</p>
+        <p id="flip-count" class="header-card-value"></p>
+      </div>
     </div>
   </div>
+  </div>
+
+  <div id="game"></div>
+
+  <script src="memory-game.js"></script>
+
+  <footer id="footer">
+    <p>Made with ♥ in San Francisco | © 2023 Sean Oliver</p>
+  </footer>
 </div>
-</div>
-
-<div id="game"></div>
-
-<script src="memory-game.js"></script>
-
 </body>
 </html>
