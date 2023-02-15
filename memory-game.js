@@ -38,6 +38,8 @@ function shuffle(desiredCards) {
   return items;
 }
 
+/* Generate Random Card Back Color ------------------------------------------ */
+
 function getRandomColor() {
   let color = "#";
   for (let i = 0; i < 6; i++) {
@@ -47,14 +49,6 @@ function getRandomColor() {
 }
 
 /* Create Cards ------------------------------------------------------------- */
-
-/** Create card for every color in colors (each will appear twice)
- *
- * Each div DOM element will have:
- * - a class with the value of the color
- * - a click event listener for each card to handleCardClick
- */
-
 
 function createCards(gameCards) {
   const gameBoard = document.getElementById("game");
@@ -85,42 +79,47 @@ const gameForm = document.getElementById('options');
 
 gameForm.addEventListener('submit', function(event) {
   event.preventDefault();
-  const desiredCards = Number(document.querySelector('#num-cards').value);
-  console.log('desiredCards:', desiredCards);
-
-  createCards(shuffle(desiredCards));
-  event.target.remove(); //FIXME - Need to replace entire form, not just button
-  title.appendChild(restartButton);
+  setGameBoard(event);
 });
 
-/* Restart Game Button ------------------------------------------------------ */
+/* Set the Game Board ------------------------------------------------------- */
 
-//TODO: Fix this implementation to work with new form functionality.
+function setGameBoard(event) {
 
-const restartButton = document.createElement('button');
-const title = document.getElementById('title');
-
-restartButton.innerText = "New Game";
-restartButton.id = 'restart';
-
-restartButton.addEventListener('click',  function(event) {
-  restartGame();
-});
-
-function restartGame() {
-
-  //NOTE - Clear game board
+  // * Clear the game board
   const cards = document.getElementsByClassName('card');
   for (let i = cards.length -1; i >= 0; i--) {
     console.log(`Removed ${cards[i].classList[0]} card`);
     cards[i].remove();
   }
 
+  // * Clear the end game message
   const endGameMsg = document.getElementById('end-game-message');
   if (endGameMsg) { endGameMsg.remove(); }
-  createCards(shuffle(colors));
-  updateScore(true);
+
+  // * Reshuffle and recreate cards
+  dealDesiredCards();
+
+  // * Update best and current score
+  if (matchedCards.length === totalCards.length) {
+    updateScore('end');
+  } else {
+    updateScore('restart');
+  }
+
+  // * Update counts on front-end
   updateCounts();
+
+  // * Change button text to "New Game"
+  document.getElementById('start').innerText = 'New Game';
+}
+
+/* Shuffle, Create, and Deal Desired Cards ---------------------------------- */
+
+function dealDesiredCards() {
+  const desiredCards = Number(document.querySelector('#num-cards').value);
+  console.log('desiredCards:', desiredCards);
+  createCards(shuffle(desiredCards));
 }
 
 /* ========================================================================== */
@@ -144,11 +143,15 @@ updateCounts();
 
 //TODO - Add hidden element for end game message so page doesn't adjust down
 
-function updateScore(forceClear = false) {
-  // if forceClear === true, end the game but do not record the score
+function updateScore(gameState = '') {
+  // * Increment score by 1
   score += 1
-  if (forceClear) { score = 0; }
-  if (matchedCards.length === totalCards.length) {
+
+  // * Mid-game restart, do not record score
+  if (gameState === 'restart') { score = 0; }
+
+  // * Game complete, record score
+  if (gameState === 'end' || matchedCards.length === totalCards.length) {
     const endGameMessage = document.createElement('p');
     endGameMessage.id = 'end-game-message';
 
@@ -168,8 +171,6 @@ function updateScore(forceClear = false) {
 
 /* Flip Card Face Up -------------------------------------------------------- */
 
-//REVIEW - How to animate the card flip?
-
 function flipCard(card) {
   card.style.backgroundColor = card.classList[0];
   card.classList.toggle('flipped');
@@ -182,7 +183,7 @@ function flipCard(card) {
 
 function unFlipCard(card) {
   card.classList.toggle('flipped');
-  card.style.backgroundColor = "#fff8ef"; //FIXME - Hardcoded bg color
+  card.style.backgroundColor = "#fff8ef";
   updateCounts();
 }
 

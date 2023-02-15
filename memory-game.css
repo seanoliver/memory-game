@@ -82,5 +82,5 @@ form#options #num-cards {
 }
 
 form#options #num-cards:hover {
-  background-color: var(--color-amber-3);
+  background-color: var(--color-amber-2);
 }
