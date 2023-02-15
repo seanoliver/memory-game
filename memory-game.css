@@ -53,22 +53,34 @@ button:hover {
 .container {
   display: flex;
   justify-content:center;
-  align-items: center;
+  align-items:start;
 }
 
 .container div {
-  padding: 10px;
   text-align: center;
 }
 
-.header-item { flex: 1; }
+.header-item {
+  flex: 1;
+  margin-top: 10px;
+}
 .header-title { flex: 3; }
+
 
 form#options {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+form#options .format-chooser {
+  display: flex;
+  padding: 0px;
+}
+
+form#options .format-chooser .format-item {
+  padding: 0px 5px;
 }
 
 form#options #num-cards {
