@@ -6,8 +6,6 @@ const flippedCards = document.getElementsByClassName('flipped');
 const matchedCards = document.getElementsByClassName('matched');
 const totalCards = document.getElementsByClassName('card');
 
-// TODO: Implement support for card back images instead of colors
-
 let score = 0;
 let lowestScore = Infinity;
 
@@ -17,18 +15,28 @@ let lowestScore = Infinity;
 
 /* Shuffle Cards ------------------------------------------------------------ */
 
-function shuffle(desiredCards) {
+function shuffle(desiredCards, cardType = 'colors') {
+
+  // * Halve the desired cards
   if (desiredCards === 0) { desiredCards = 10; }
   const evenCards = Math.floor(Number(desiredCards) / 2);
-  console.log(`Creating ${evenCards * 2} cards.`)
+  console.log(`Creating ${evenCards * 2} ${cardType} cards.`)
   const items = [];
 
+  // * Fill items with colors or GIFs
   for (let i = 0; i < evenCards; i++) {
-    const cardColor = getRandomColor();
-    items.push(cardColor, cardColor);
-    console.log('creating items:', items);
+    if (cardType === 'colors') {
+      const cardColor = getRandomColor();
+      items.push(cardColor, cardColor);
+    } else if (cardType === 'gifs') {
+      const cardGIF = `gifs/${i}.gif`;
+      console.log('cardGIF: ', cardGIF);
+      items.push(cardGIF, cardGIF);
+    }
+    console.log('items: ', items);
   }
 
+  // * Shuffle cards
   for (let i = items.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * i);
     [items[i], items[j]] = [items[j], items[i]];
@@ -50,14 +58,14 @@ function getRandomColor() {
 
 /* Create Cards ------------------------------------------------------------- */
 
-function createCards(gameCards) {
+function createCards(gameCards, cardType = 'colors') {
   const gameBoard = document.getElementById("game");
 
-  for (let color of gameCards) {
+  for (let cardBack of gameCards) {
 
     const newCard = document.createElement('div');
-
-    newCard.classList.add(color);
+    newCard.classList.add(cardBack);
+    newCard.classList.add(cardType);
     newCard.classList.add('card');
 
     newCard.addEventListener('click', function(event) {
@@ -81,6 +89,25 @@ gameForm.addEventListener('submit', function(event) {
   event.preventDefault();
   setGameBoard(event);
 });
+
+/* Set GIF Card Count to 20 ------------------------------------------------- */
+
+const radioButtons = document.getElementsByName('format');
+const cardCountField = document.getElementById('num-cards');
+
+for (let i = 0; i < radioButtons.length; i++) {
+  radioButtons[i].addEventListener('change', function() {
+    if (this.checked) {
+      if (this.value === 'GIFs') {
+        cardCountField.value = '20';
+        cardCountField.disabled = true;
+      } else {
+        cardCountField.value = '';
+        cardCountField.disabled = false;
+      }
+    }
+  });
+}
 
 /* Set the Game Board ------------------------------------------------------- */
 
@@ -118,8 +145,17 @@ function setGameBoard(event) {
 
 function dealDesiredCards() {
   const desiredCards = Number(document.querySelector('#num-cards').value);
+
+  const formatOptions = document.getElementsByName('format');
+  let desiredType;
+  for (let i = 0; i < formatOptions.length; i++) {
+    if (formatOptions[i].checked) { desiredType = formatOptions[i].id; }
+  }
+
   console.log('desiredCards:', desiredCards);
-  createCards(shuffle(desiredCards));
+  console.log('desiredType:', desiredType);
+
+  createCards(shuffle(desiredCards, desiredType), desiredType);
 }
 
 /* ========================================================================== */
@@ -141,8 +177,6 @@ updateCounts();
 
 /* Update Score ------------------------------------------------------------- */
 
-//TODO - Add hidden element for end game message so page doesn't adjust down
-
 function updateScore(gameState = '') {
   // * Increment score by 1
   score += 1
@@ -152,6 +186,7 @@ function updateScore(gameState = '') {
 
   // * Game complete, record score
   if (gameState === 'end' || matchedCards.length === totalCards.length) {
+    const header = document.getElementById('header');
     const endGameMessage = document.createElement('p');
     endGameMessage.id = 'end-game-message';
 
@@ -161,7 +196,7 @@ function updateScore(gameState = '') {
     } else {
       endGameMessage.innerText = 'Great job! Play again?';
     }
-    title.appendChild(endGameMessage);
+    header.appendChild(endGameMessage);
   }
 }
 
@@ -172,8 +207,19 @@ function updateScore(gameState = '') {
 /* Flip Card Face Up -------------------------------------------------------- */
 
 function flipCard(card) {
-  card.style.backgroundColor = card.classList[0];
+
+  if (card.classList[1] === 'colors') {
+    card.style.backgroundColor = card.classList[0];
+  }
+
+  if (card.classList[1] === 'gifs') {
+    card.style.background = `url(${card.classList[0]})`
+    card.style.backgroundSize = 'cover';
+    card.style.backgroundPosition = 'center';
+  }
+
   card.classList.toggle('flipped');
+
   if (flippedCards.length >= 2) {
     checkMatches();
   }
@@ -183,6 +229,7 @@ function flipCard(card) {
 
 function unFlipCard(card) {
   card.classList.toggle('flipped');
+  card.style.background = '';
   card.style.backgroundColor = "#fff8ef";
   updateCounts();
 }
