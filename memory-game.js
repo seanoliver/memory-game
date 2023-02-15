@@ -1,10 +1,6 @@
 "use strict";
 
 const FOUND_MATCH_WAIT_MSECS = 1000;
-const COLORS = [
-  "red", "blue", "green", "orange", "purple",
-  "red", "blue", "green", "orange", "purple",
-];
 
 // TODO: Allow for any number of cards rather than always using the same deck
 // TODO: Instead of hard-coding colors, use something else like images
@@ -18,25 +14,121 @@ const totalCards = document.getElementsByClassName('card');
 let score = 0;
 let lowestScore = Infinity;
 
-function generateRandomColors(num) {
-  const colors = [];
-
-  for (let i = 0; i < num; i++) {
-    let color = "#";
-    for (let j = 0; j < 6; j++) {
-      color += Math.floor(Math.random() * 16).toString(16);
-    }
-    colors.push(color);
-  }
-
-  return colors;
-}
-
 /* ========================================================================== */
 /* Start the Game (Create & Shuffle Cards)                                    */
 /* ========================================================================== */
 
-/* --------------------------- Update Card Counts --------------------------- */
+/* Shuffle Cards ------------------------------------------------------------ */
+
+function shuffle(desiredCards = 10) {
+  const evenCards = Math.floor(Number(desiredCards) / 2);
+  const items = [];
+
+  for (let i = 0; i < evenCards; i++) {
+    const cardColor = getRandomColor();
+    items.push(cardColor, cardColor);
+  }
+
+  for (let i = items.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * i);
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+
+  return items;
+}
+
+function getRandomColor() {
+  let color = "";
+  for (let i = 0; i < 6; i++) {
+    color += Math.floor(Math.random() * 16).toString(16);
+  }
+  return color;
+}
+
+/* Create Cards ------------------------------------------------------------- */
+
+/** Create card for every color in colors (each will appear twice)
+ *
+ * Each div DOM element will have:
+ * - a class with the value of the color
+ * - a click event listener for each card to handleCardClick
+ */
+
+
+function createCards(gameCards) {
+  const gameBoard = document.getElementById("game");
+  const evenCards = Math.floor(Number(desiredCards) / 2);
+
+  for (let card of evenCards) {
+    const cardColor = getRandomColor();
+
+    for (let i = 0; i < 2; i++) {
+      const newCard = document.createElement('div');
+
+      newCard.classList.add(cardColor);
+      newCard.classList.add('card');
+
+      newCard.addEventListener('click', function(event) {
+        handleCardClick(event);
+      });
+
+      gameBoard.appendChild(newCard);
+    }
+  }
+
+}
+
+/* ========================================================================== */
+/* Game Form + Buttons                                                        */
+/* ========================================================================== */
+
+/* Start Game Button -------------------------------------------------------- */
+
+const gameForm = document.getElementById('options');
+
+gameForm.addEventListener('submit', function(event) {
+  event.preventDefault();
+  const desiredCards = document.querySelector('#num-cards');
+
+  createCards(colors, desiredCards);
+  event.target.remove();
+  title.appendChild(restartButton);
+});
+
+/* Restart Game Button ------------------------------------------------------ */
+//NOTE - Restarts game mid-game
+
+const restartButton = document.createElement('button');
+const title = document.getElementById('title');
+
+restartButton.innerText = "New Game";
+restartButton.id = 'restart';
+
+restartButton.addEventListener('click',  function(event) {
+  restartGame();
+});
+
+function restartGame() {
+
+  //NOTE - Clear game board
+  const cards = document.getElementsByClassName('card');
+  for (let i = cards.length -1; i >= 0; i--) {
+    console.log(`Removed ${cards[i].classList[0]} card`);
+    cards[i].remove();
+  }
+
+  const endGameMsg = document.getElementById('end-game-message');
+  if (endGameMsg) { endGameMsg.remove(); }
+  createCards(shuffle(colors));
+  updateScore(true);
+  updateCounts();
+}
+
+/* ========================================================================== */
+/* Scoring & Tracking                                                         */
+/* ========================================================================== */
+
+/* Update Card Counts ------------------------------------------------------- */
 
 function updateCounts() {
   document.getElementById('match-count').innerText = matchedCards.length;
@@ -71,88 +163,9 @@ function updateScore(forceClear = false) {
   }
 }
 
-/* Shuffle Cards ------------------------------------------------------------ */
-
-function shuffle(items) {
-
-  for (let i = items.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * i);
-    [items[i], items[j]] = [items[j], items[i]];
-  }
-
-  return items;
-}
-
-const colors = shuffle(COLORS);
-
-/* Create Cards ------------------------------------------------------------- */
-
-/** Create card for every color in colors (each will appear twice)
- *
- * Each div DOM element will have:
- * - a class with the value of the color
- * - a click event listener for each card to handleCardClick
- */
-// TODO: Remove innerText showing card color
-// TODO: Style the cards to look more like cards
-
-
-function createCards(colors) {
-  const gameBoard = document.getElementById("game");
-
-  for (let color of colors) {
-    const card = document.createElement('div');
-
-    card.classList.add(color);
-    card.classList.add('card');
-
-    card.innerText = color;
-
-    card.addEventListener('click', function(event) {
-      handleCardClick(event);
-    });
-    gameBoard.appendChild(card);
-  }
-}
-
-/* Start Game Button -------------------------------------------------------- */
-
-const startButton = document.getElementById('start');
-
-startButton.addEventListener('click', function(event) {
-  createCards(colors);
-  event.target.remove();
-  title.appendChild(restartButton);
-});
-
-/* Restart Game Button ------------------------------------------------------ */
-//NOTE - Restarts game mid-game
-
-const restartButton = document.createElement('button');
-const title = document.getElementById('title');
-
-restartButton.innerText = "New Game";
-restartButton.id = 'restart';
-
-restartButton.addEventListener('click',  function(event) {
-  restartGame();
-});
-
-function restartGame() {
-
-  //NOTE - Clear game board
-  const cards = document.getElementsByClassName('card');
-  for (let i = cards.length -1; i >= 0; i--) {
-    console.log(`Removed ${cards[i].classList[0]} card`);
-    cards[i].remove();
-  }
-
-  const endGameMsg = document.getElementById('end-game-message');
-  if (endGameMsg) { endGameMsg.remove(); }
-  createCards(shuffle(colors));
-  updateScore(true);
-  updateCounts();
-}
+/* ========================================================================== */
+/* Card Flip                                                                  */
+/* ========================================================================== */
 
 /* Flip Card Face Up -------------------------------------------------------- */
 
@@ -170,8 +183,7 @@ function flipCard(card) {
 
 function unFlipCard(card) {
   card.classList.toggle('flipped');
-  // TODO - Change background color back to original color
-  card.style.backgroundColor = 'white';
+  card.style.backgroundColor = "#fff8ef"; //FIXME - Hardcoded bg color
   updateCounts();
 }
 
