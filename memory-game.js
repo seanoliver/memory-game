@@ -22,16 +22,19 @@ let lowestScore = Infinity;
 
 function shuffle(desiredCards = 10) {
   const evenCards = Math.floor(Number(desiredCards) / 2);
+  console.log(`Creating ${evenCards * 2} cards.`)
   const items = [];
 
   for (let i = 0; i < evenCards; i++) {
     const cardColor = getRandomColor();
     items.push(cardColor, cardColor);
+    console.log('creating items:', items);
   }
 
   for (let i = items.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * i);
     [items[i], items[j]] = [items[j], items[i]];
+    console.log('shuffling items:', items);
   }
 
   return items;
@@ -57,23 +60,19 @@ function getRandomColor() {
 
 function createCards(gameCards) {
   const gameBoard = document.getElementById("game");
-  const evenCards = Math.floor(Number(desiredCards) / 2);
 
-  for (let card of evenCards) {
-    const cardColor = getRandomColor();
+  for (let color of gameCards) {
 
-    for (let i = 0; i < 2; i++) {
-      const newCard = document.createElement('div');
+    const newCard = document.createElement('div');
 
-      newCard.classList.add(cardColor);
-      newCard.classList.add('card');
+    newCard.classList.add(color);
+    newCard.classList.add('card');
 
-      newCard.addEventListener('click', function(event) {
-        handleCardClick(event);
-      });
+    newCard.addEventListener('click', function(event) {
+      handleCardClick(event);
+    });
 
-      gameBoard.appendChild(newCard);
-    }
+    gameBoard.appendChild(newCard);
   }
 
 }
@@ -88,9 +87,10 @@ const gameForm = document.getElementById('options');
 
 gameForm.addEventListener('submit', function(event) {
   event.preventDefault();
-  const desiredCards = document.querySelector('#num-cards');
+  const desiredCards = Number(document.querySelector('#num-cards').value);
+  console.log('desiredCards:', desiredCards);
 
-  createCards(colors, desiredCards);
+  createCards(shuffle(desiredCards));
   event.target.remove();
   title.appendChild(restartButton);
 });
