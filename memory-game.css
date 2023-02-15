@@ -43,6 +43,7 @@ button:hover {
   display: inline-block;
 }
 
+/* TODO: Override this hover effect for matched cards. */
 .card:hover {
   box-shadow: 10px 10px 20px var(--color-amber-3);
   background-color: var(--color-amber-3) !important;

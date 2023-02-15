@@ -2,14 +2,11 @@
 
 const FOUND_MATCH_WAIT_MSECS = 1000;
 
-// TODO: Allow for any number of cards rather than always using the same deck
-// TODO: Instead of hard-coding colors, use something else like images
-
 const flippedCards = document.getElementsByClassName('flipped');
 const matchedCards = document.getElementsByClassName('matched');
 const totalCards = document.getElementsByClassName('card');
 
-// ? Optional: Might also be nice to capture user name / identity
+// TODO: Implement support for card back images instead of colors
 
 let score = 0;
 let lowestScore = Infinity;
@@ -20,7 +17,8 @@ let lowestScore = Infinity;
 
 /* Shuffle Cards ------------------------------------------------------------ */
 
-function shuffle(desiredCards = 10) {
+function shuffle(desiredCards) {
+  if (desiredCards === 0) { desiredCards = 10; }
   const evenCards = Math.floor(Number(desiredCards) / 2);
   console.log(`Creating ${evenCards * 2} cards.`)
   const items = [];
@@ -91,12 +89,13 @@ gameForm.addEventListener('submit', function(event) {
   console.log('desiredCards:', desiredCards);
 
   createCards(shuffle(desiredCards));
-  event.target.remove();
+  event.target.remove(); //FIXME - Need to replace entire form, not just button
   title.appendChild(restartButton);
 });
 
 /* Restart Game Button ------------------------------------------------------ */
-//NOTE - Restarts game mid-game
+
+//TODO: Fix this implementation to work with new form functionality.
 
 const restartButton = document.createElement('button');
 const title = document.getElementById('title');
