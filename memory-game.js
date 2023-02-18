@@ -29,7 +29,12 @@ function shuffle(desiredCards, cardType = 'colors') {
       const cardColor = getRandomColor();
       items.push(cardColor, cardColor);
     } else if (cardType === 'gifs') {
-      const cardGIF = `gifs/${i}.gif`;
+      let cardGIF;
+      if (`gifs/${i}.gif`) {
+        cardGIF = `gifs/${i}.gif`;
+      } else {
+        cardGIF = `https://seanoliver.dev/memory-game/gifs/${i}.gif`
+      }
       console.log('cardGIF: ', cardGIF);
       items.push(cardGIF, cardGIF);
     }
